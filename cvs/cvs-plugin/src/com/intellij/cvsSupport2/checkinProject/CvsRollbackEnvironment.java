@@ -30,6 +30,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vcs.FilePath;
 import com.intellij.openapi.vcs.VcsException;
 import com.intellij.openapi.vcs.changes.Change;
+import com.intellij.openapi.vcs.changes.ChangelistBuilder;
 import com.intellij.openapi.vcs.changes.ChangesUtil;
 import com.intellij.openapi.vcs.rollback.DefaultRollbackEnvironment;
 import com.intellij.openapi.vcs.rollback.RollbackProgressListener;
@@ -51,9 +52,9 @@ public class CvsRollbackEnvironment extends DefaultRollbackEnvironment {
     myProject = project;
   }
 
+  //public void rollbackChanges(List<Change> changes, final List<VcsException> exceptions, @NotNull final RollbackProgressListener listener) {
   @Override
-  public void rollbackChanges(List<Change> changes, final List<VcsException> exceptions,
-                              @NotNull final RollbackProgressListener listener) {
+  public  void rollbackChanges(List<? extends Change> changes, final List<VcsException> vcsExceptions, @NotNull final RollbackProgressListener listener) {
     listener.determinate();
     for (Change change : changes) {
       final FilePath filePath = ChangesUtil.getFilePath(change);
@@ -81,10 +82,21 @@ public class CvsRollbackEnvironment extends DefaultRollbackEnvironment {
     }
   }
 
+  /**
+   * Rolls back the deletion of files which have been deleted locally but not scheduled for deletion
+   * from VCS. The implementation of this method should get the current version of the listed files from VCS.
+   * You do not need to implement this method if you never report such files to
+   * {@link ChangelistBuilder#processLocallyDeletedFile}.
+   *
+   * @param files      the files to rollback deletion of.
+   * @param exceptions
+   * @param listener   @return list of errors occurred, or an empty list if no errors occurred.
+   */
+
+  //public void rollbackMissingFileDeletion(List<FilePath> filePaths, final List<VcsException> exceptions, final RollbackProgressListener listener) {
   @Override
-  public void rollbackMissingFileDeletion(List<FilePath> filePaths, final List<VcsException> exceptions,
-                                          final RollbackProgressListener listener) {
-    final CvsHandler cvsHandler = CommandCvsHandler.createCheckoutFileHandler(filePaths.toArray(new FilePath[0]),
+  public void rollbackMissingFileDeletion(List<? extends FilePath> files, List<? super VcsException> exceptions, RollbackProgressListener listener) {
+    final CvsHandler cvsHandler = CommandCvsHandler.createCheckoutFileHandler(files.toArray(new FilePath[0]),
                                                                               CvsConfiguration.getInstance(myProject), null);
     final CvsOperationExecutor executor = new CvsOperationExecutor(myProject);
     executor.performActionSync(cvsHandler, CvsOperationExecutorCallback.EMPTY);

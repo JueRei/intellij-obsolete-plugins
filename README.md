@@ -1,6 +1,16 @@
 [![obsolete JetBrains project](https://jb.gg/badges/obsolete.svg)](https://confluence.jetbrains.com/display/ALL/JetBrains+on+GitHub)
 
-# IntelliJ IDEA Obsolete Plugins
+# JueRei/20201208
+  * Ported CVS plugin to
+    * Java 11
+    * IntelliJ 2020.3
+    
+To build your own CVS plugin
+  * Download this GitHub project
+  * Build cvs->intellij->buildPlugin
+  * Install plugin vs/build/libs/cvs-203.0.jar from disk 
+
+# Fork of "IntelliJ IDEA Obsolete Plugins"
 
 Over the years, IntelliJ IDEA has accumulated support for a large array of technologies, and many of those technologies are no longer actively maintained. We know that there are still people using those technologies, and up until now we’ve been maintaining plugins for them as part of the main IntelliJ IDEA source repository. However, our project has been growing, and carrying this baggage is getting more and more difficult both for our users (for whom the plugins affect the size of installation and potentially performance) and for our development team. At the same time, we’ve established procedures for maintaining a stable third-party plugin API, so we’re confident that moving plugins out of the main repository will not affect their stability as the IDE evolves.
 
